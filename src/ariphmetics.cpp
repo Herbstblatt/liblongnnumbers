@@ -119,6 +119,11 @@ LongNumber LongNumber::operator-() const {
     return new_number;
 }
 
+LongNumber abs(LongNumber number) {
+    number.is_positive = true;
+    return number;
+}
+
 LongNumber LongNumber::operator+(const LongNumber& other) const {
     if (!this->is_positive && !other.is_positive) {
         LongNumber result = this->_add(other);
@@ -329,5 +334,5 @@ LongNumber LongNumber::operator/(const LongNumber& other) const {
 LongNumber LongNumber::operator/(const LongNumber& other) const {
     /* First, let's write whole number division */
     LongNumber remainder = LongNumber { std::vector<bool>(this->number.size(), 0), this->precision, true };
-    
+
 }

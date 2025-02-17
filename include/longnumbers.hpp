@@ -11,10 +11,10 @@
 class LongNumber {
 public:
     LongNumber();
-    LongNumber(int number, int precision = 10);
-    LongNumber(long long number, int precision = 10);
-    LongNumber(double number, int precision = 10);
-    LongNumber(long double number, int precision = 10);
+    LongNumber(int number, int precision = 32);
+    LongNumber(long long number, int precision = 32);
+    LongNumber(double number, int precision = 32);
+    LongNumber(long double number, int precision = 32);
     LongNumber(const LongNumber&) = default;
     ~LongNumber() = default;
 
@@ -23,6 +23,7 @@ public:
     LongNumber operator-(const LongNumber& other) const;
     LongNumber operator*(const LongNumber& other) const;
     LongNumber operator/(const LongNumber& other) const;
+    friend LongNumber abs(LongNumber num);
 
     std::string to_string(int precision = -1) const;
     friend std::ostream& operator<<(std::ostream& out, const LongNumber& num);
