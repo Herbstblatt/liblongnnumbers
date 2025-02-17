@@ -18,11 +18,16 @@ LongNumber LongNumber::_add(const LongNumber& other) const {
         if (ind < prec_diff) {
             return static_cast<int>(t);
         }
-        return static_cast<int>(t) + static_cast<int>(other_num[ind - prec_diff]);
+        int other_val = 0;
+        if (ind - prec_diff < other_num.size()) {
+            other_val = static_cast<int>(other_num[ind - prec_diff]);
+        }
+        return static_cast<int>(t) + other_val;
     }, 2);
     //print_vector(num);
 
-    return LongNumber {num, std::max(this->precision, other.precision), true};
+    auto result = LongNumber {num, std::max(this->precision, other.precision), true};
+    return result;
 }
 
 LongNumber LongNumber::_substract(const LongNumber& other) const {
@@ -180,7 +185,7 @@ void LongNumber::_shr() {
     this->precision++;
 }
 
-LongNumber LongNumber::operator/(const LongNumber& other) const {
+/*LongNumber LongNumber::operator/(const LongNumber& other) const {
     int target_precision = std::max(this->precision, other.precision);
     if (other >= 1) {
         LongNumber left { 0 }, right { *this };
@@ -202,10 +207,11 @@ LongNumber LongNumber::operator/(const LongNumber& other) const {
         }
         return left;
     }
-}
+}*/
 
-/* TODO: Hate this shit
+/* TODO: Hate this shit */
 
+/*
 template <typename T>
 bool v1_less(const std::vector<T>& v1, const std::vector<T> v2) {
     bool last_result { false };
@@ -275,7 +281,7 @@ LongNumber LongNumber::operator/(const LongNumber& other) const {
                 }
             }
             if (curr[i] == 1) {
-                numsize = curr.size() - i + 1;
+                numsize = curr.size() - i;
             }
         }
 
@@ -318,3 +324,10 @@ LongNumber LongNumber::operator/(const LongNumber& other) const {
     };
 }
 */
+
+/* Division: version 3 */
+LongNumber LongNumber::operator/(const LongNumber& other) const {
+    /* First, let's write whole number division */
+    LongNumber remainder = LongNumber { std::vector<bool>(this->number.size(), 0), this->precision, true };
+    
+}
