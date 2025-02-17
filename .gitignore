@@ -1,5 +1,2 @@
-*.o
-*.out
 .vscode
-
-main.cpp
+build
