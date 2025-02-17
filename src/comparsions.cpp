@@ -14,15 +14,22 @@ std::strong_ordering LongNumber::operator<=>(const LongNumber& other) const {
     if (!this->is_positive && !other.is_positive) {
         std::swap(first, second);
     }
+
+    int first_non_zero = static_cast<int>(first->number.size()) - 1;
+    while (first->number[first_non_zero] == 0) {
+        first_non_zero--;
+    }
+
+    int second_non_zero = static_cast<int>(second->number.size()) - 1;
+    while (second->number[second_non_zero] == 0) {
+        second_non_zero--;
+    }
     
-    if (auto cmp = (first->number.size() - first->precision) <=> (second->number.size() - second->precision); cmp != 0) {
+    if (auto cmp = (first_non_zero - first->precision) <=> (second_non_zero - second->precision); cmp != 0) {
         return cmp;
     }
     
-    int this_size = static_cast<int>(first->number.size());
-    int other_size = static_cast<int>(second->number.size());
-    
-    for (int i = this_size, j = other_size; std::max(i, j) >= 0; i--, j--) {
+    for (int i = first_non_zero, j = second_non_zero; std::max(i, j) >= 0; i--, j--) {
         bool this_val;
         if (i >= 0) this_val = first->number[i];
         else this_val = 0;
