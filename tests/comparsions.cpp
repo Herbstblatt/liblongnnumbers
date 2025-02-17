@@ -17,6 +17,11 @@ TEST_CASE("Long number comparsion") {
     LongNumber frac_not_exact_prec_5 {0.2, 5};
     LongNumber frac_not_exact_prec_10 {0.2, 10};
 
+    LongNumber zero_prec_5 {0, 2};
+    LongNumber zero_prec_10 {0, 10};
+
+    LongNumber very_small { 0.00001 };
+
     SUBCASE("Compare equal whole numbers") {
         CHECK(whole_small_prec_2 == whole_small_prec_2);
         CHECK(whole_small_prec_2 == whole_small_prec_10);
@@ -41,4 +46,21 @@ TEST_CASE("Long number comparsion") {
         CHECK_MESSAGE(frac_not_exact_prec_5 < frac_big_prec_10, "Unexact, different precision");
         CHECK_MESSAGE(frac_not_exact_prec_10 < frac_big_prec_5, "Unexact, different precision");
     }
+
+    SUBCASE("Compare with zero") {
+        CHECK(zero_prec_5 < whole_small_prec_10);
+        CHECK(zero_prec_5 < frac_small_prec_5);
+
+        CHECK(zero_prec_5 < frac_small_prec_5);
+        CHECK(zero_prec_5 < frac_small_prec_10);
+        CHECK(zero_prec_10 < frac_small_prec_5);
+
+        CHECK(zero_prec_5 < frac_not_exact_prec_5);
+        CHECK(zero_prec_5 < frac_not_exact_prec_10);
+        CHECK(zero_prec_10 < frac_not_exact_prec_5);
+
+        CHECK(zero_prec_5 < very_small);
+        CHECK(zero_prec_10 < very_small);
+    }
+
 }
