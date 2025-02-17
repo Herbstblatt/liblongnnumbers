@@ -54,6 +54,6 @@ private:
     std::vector<int> _to_vec_integral() const;
 };
 
-inline LongNumber operator""_longnum(long double number);
+LongNumber operator""_longnum(long double number);
 
 #endif
