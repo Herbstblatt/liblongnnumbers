@@ -143,7 +143,7 @@ LongNumber LongNumber::operator+(const LongNumber& other) const {
 
 LongNumber LongNumber::operator-(const LongNumber& other) const {
     if (!other.is_positive && !this->is_positive) {
-        return (-*this) - (-other);
+        return (-other) - (-*this);
     }
     if (!other.is_positive) {
         LongNumber result = this->_add(other);
