@@ -67,8 +67,10 @@ LongNumber LongNumber::_substract(const LongNumber& other) const {
             if (taken_prev && num[i] == 1) {
                 result[i] = 0;
                 taken_prev = false;
-            } 
-            if (num[i] < curr_other_num) {
+            } else if (taken_prev && num[i] == 0) {
+                result[i] = 1;
+            }
+            if (result[i] < curr_other_num) {
                 result[i] = 1;
                 taken_prev = true;
             } else {
@@ -99,7 +101,9 @@ LongNumber LongNumber::_substract(const LongNumber& other) const {
             if (taken_prev && curr_num == 1) {
                 curr_num = 0;
                 taken_prev = false;
-            } 
+            } else if (taken_prev && curr_num == 0) {
+                curr_num = 1;
+            }
             if (curr_num < curr_other_num) {
                 result[i] = 1;
                 taken_prev = true;
@@ -190,29 +194,31 @@ void LongNumber::_shr() {
     this->precision++;
 }
 
-/*LongNumber LongNumber::operator/(const LongNumber& other) const {
-    int target_precision = std::max(this->precision, other.precision);
-    if (other >= 1) {
-        LongNumber left { 0 }, right { *this };
-        for (int i = 0; i < 100 * target_precision; i++) {
-            LongNumber mid { left + right };
-            mid._shr();
-            if (mid * other <= *this) left = mid;
-            else right = mid;
-        }
-        return left;
-    } else {
-        LongNumber left { *this }, right { other };
-        while (right * other <= *this) right._shl();
-        for (int i = 0; i < 100 * target_precision; i++) {
-            LongNumber mid { left + right };
-            mid._shr();
-            if (mid * other <= *this) left = mid;
-            else right = mid;
-        }
-        return left;
-    }
-}*/
+// LongNumber LongNumber::operator/(const LongNumber& other) const {
+//     int target_precision = std::max(this->precision, other.precision);
+//     if (other >= 1) {
+//         LongNumber left { 0 }, right { *this };
+//         for (int i = 0; i < 100; i++) {
+//             LongNumber mid { left + right };
+//             mid._shr();
+//             if ((mid * other) <= *this) left = mid;
+//             else right = mid;
+//         }
+//         return left;
+//     } else {
+//         LongNumber left { *this }, right { other };
+//         while (right * other <= *this) {
+//              right._shl();
+//         }
+//         for (int i = 0; i < 100; i++) {
+//             LongNumber mid { left + right };
+//             mid._shr();
+//             if ((mid * other) <= *this) left = mid;
+//             else right = mid;
+//         }
+//         return left;
+//     }
+// }
 
 /* TODO: Hate this shit */
 
@@ -332,7 +338,32 @@ LongNumber LongNumber::operator/(const LongNumber& other) const {
 
 /* Division: version 3 */
 LongNumber LongNumber::operator/(const LongNumber& other) const {
-    /* First, let's write whole number division */
-    LongNumber remainder = LongNumber { std::vector<bool>(this->number.size(), 0), this->precision, true };
-
+    int target_precision = std::max(this->precision, other.precision);
+    int target_len = this->number.size() + target_precision - std::max(0, this->precision - other.precision);
+    std::vector<bool> vec_padded(target_len, 0);
+    std::copy_backward(this->number.begin(), this->number.end(), vec_padded.end());
+    
+    LongNumber remainder = LongNumber { std::vector<bool>(target_len, 0), target_precision, true };
+    LongNumber quotient =  LongNumber { std::vector<bool>(target_len, 0), target_precision, true };
+    LongNumber other_abs = abs(other);
+    other_abs.precision = 0;
+    int curr_pos = target_len;
+    remainder.precision = target_len;
+    for (int i = target_len - 1; i >= 0; --i) {
+        curr_pos--;
+        remainder.precision--;
+        remainder.number[curr_pos] = vec_padded[i];
+        if (remainder >= other_abs) {
+            remainder = remainder - other_abs;
+            remainder.number.resize(target_len);
+            if (target_precision > this->precision) {
+                quotient.number[i - this->precision + target_precision] = 1;
+            } else {
+                quotient.number[i] = 1;
+            }
+        }
+    }
+    quotient._remove_leading_zeros();
+    quotient.is_positive = !static_cast<bool>(this->is_positive ^ other.is_positive);
+    return quotient;
 }
