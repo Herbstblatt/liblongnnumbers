@@ -16,13 +16,22 @@ std::strong_ordering LongNumber::operator<=>(const LongNumber& other) const {
     }
 
     int first_non_zero = static_cast<int>(first->number.size()) - 1;
-    while (first->number[first_non_zero] == 0) {
+    while (first_non_zero >= 0 && first->number[first_non_zero] == 0) {
         first_non_zero--;
     }
-
+    
     int second_non_zero = static_cast<int>(second->number.size()) - 1;
-    while (second->number[second_non_zero] == 0) {
+    while (second_non_zero >= 0 && second->number[second_non_zero] == 0) {
         second_non_zero--;
+    }
+    
+    if (first_non_zero < 0 && second_non_zero < 0) return std::strong_ordering::equal;
+    if (first_non_zero < 0) {
+        if (other.is_positive) return std::strong_ordering::less;
+        else return std::strong_ordering::greater;
+    } else if (second_non_zero < 0) {
+        if (this->is_positive) return std::strong_ordering::greater;
+        return std::strong_ordering::less;
     }
     
     if (auto cmp = (first_non_zero - first->precision) <=> (second_non_zero - second->precision); cmp != 0) {
