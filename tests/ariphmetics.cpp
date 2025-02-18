@@ -18,6 +18,57 @@ TEST_CASE("Test negation") {
     }
 }
 
+TEST_CASE("Test addition") {
+    SUBCASE("Whole numbers") {
+        LongNumber whole_small_prec_2 { 15, 2 };
+        LongNumber whole_small_prec_10 { 15, 2 };
+
+        LongNumber whole_big_prec_2 { 60, 2 };
+        LongNumber whole_big_prec_10 { 60, 2 };
+
+        LongNumber ans { 75 };
+        LongNumber ans2 { 45 };
+
+        CHECK_EQ(whole_big_prec_2 + whole_small_prec_2, ans);
+        CHECK_EQ(whole_big_prec_2 + whole_small_prec_10, ans);
+        CHECK_EQ(whole_big_prec_10 + whole_small_prec_2, ans);
+
+        CHECK_EQ(whole_big_prec_2 + (-whole_small_prec_2), ans2);
+        CHECK_EQ((-whole_big_prec_2) + whole_small_prec_2, -ans2);
+        CHECK_EQ((-whole_big_prec_2) + (-whole_small_prec_2), -ans);
+    }
+
+    SUBCASE("Fractional numbers") {
+        LongNumber whole_big_prec_10 { 2, 10 };
+        LongNumber whole_big_prec_32 { 2, 64 };
+        
+        LongNumber frac_small_prec_10 { 0.25, 10 };
+        LongNumber frac_small_prec_32 { 0.25, 32 };
+
+        LongNumber frac_not_exact_prec_10 { 0.2, 10 };
+        LongNumber frac_not_exact_prec_32 { 0.2, 64 };
+
+        LongNumber frac_big_prec_10 { 1.25, 10 };
+        LongNumber frac_big_prec_32 { 1.25, 32 };
+        
+        LongNumber eps { 0.0001 };
+
+        CHECK(abs(frac_small_prec_10 + whole_big_prec_10 - 2.25_longnum) < eps);
+        CHECK(abs(frac_small_prec_32 + whole_big_prec_10 - 2.25_longnum) < eps);
+        CHECK(abs(frac_small_prec_10 + whole_big_prec_32 - 2.25_longnum) < eps);
+
+        CHECK(abs(frac_not_exact_prec_32 + whole_big_prec_32 - 2.2_longnum) < eps);
+        
+        CHECK(abs(frac_not_exact_prec_32 + frac_not_exact_prec_32 - 0.4) < eps);
+        
+        CHECK(abs(frac_big_prec_10 + whole_big_prec_10 - 3.25_longnum) < eps);
+        CHECK(abs(frac_big_prec_32 + whole_big_prec_10 - 3.25_longnum) < eps);
+        CHECK(abs(frac_big_prec_10 + whole_big_prec_32 - 3.25_longnum) < eps);
+        
+        CHECK(abs(frac_big_prec_32 + frac_not_exact_prec_32 - 1.45_longnum) < eps);
+    }
+}
+
 TEST_CASE("Test division") {
     SUBCASE("Whole numbers") {
         LongNumber whole_big_prec_2 { 12, 2 };

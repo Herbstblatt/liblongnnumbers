@@ -134,14 +134,27 @@ LongNumber LongNumber::operator+(const LongNumber& other) const {
         result.is_positive = false;
         return result;
     } else if (!this->is_positive) {
-        return other - *this;
+        return other - (-*this);
     } else if (!other.is_positive) {
-        return *this - other;
+        return *this - (-other);
     }
     return this->_add(other);
 }
 
 LongNumber LongNumber::operator-(const LongNumber& other) const {
+    if (!other.is_positive && !this->is_positive) {
+        return (-*this) - (-other);
+    }
+    if (!other.is_positive) {
+        LongNumber result = this->_add(other);
+        return result;
+    }
+    if (!this->is_positive) {
+        LongNumber result = this->_add(other);
+        result.is_positive = false;
+        return result;
+    }
+
     auto cmp = *this <=> other;
     if (cmp == std::strong_ordering::less) {
         LongNumber result = other._substract(*this);
