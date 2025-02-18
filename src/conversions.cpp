@@ -7,7 +7,7 @@
 std::vector<int> LongNumber::_to_vec_integral() const {
     /* Convert int part */
     std::vector<int> int_result {0};
-    for (int i = this->number.size(); i >= this->precision; i--) {
+    for (int i = this->number.size() - 1; i >= this->precision; i--) {
         perform_action_carrying<int>(int_result, [&](int t, int idx){ return t * 2; });
         perform_action_carrying<int>(int_result, [&](int t, int idx){ 
             if (idx == 0) return t + this->number[i]; 
@@ -26,10 +26,13 @@ std::string LongNumber::to_string(int precision) const {
     LongNumber frac{};
     int fst_one_pos = 0;
     for (int i = 0; i < this->precision; i++) {
-        if (this->number[i] == 1 && fst_one_pos == 0) {
+        int elem{};
+        if (i >= this->number.size()) elem = 0;
+        else elem = this->number[i];
+        if (elem == 1 && fst_one_pos == 0) {
             fst_one_pos = 1;
         }
-        if (this->number[i] == 1) frac = frac + binpow(2, i - fst_one_pos);
+        if (elem == 1) frac = frac + binpow(2, i - fst_one_pos);
     }
 
     frac = frac * binpow(5, this->precision - fst_one_pos);
