@@ -5,7 +5,9 @@
 
 #include <functional>
 #include <iostream>
-#include "../include/longnumbers.hpp"
+#include "longnumbers.hpp"
+
+using namespace longnumbers;
 
 template <typename T>
 void perform_action_carrying(std::vector<T>& vec, const std::function<int(T, int)>& fn, int carry_mod = 10) {

@@ -8,52 +8,60 @@
 #include <cstddef>
 #include <string>
 
-class LongNumber {
-public:
-    LongNumber();
-    LongNumber(int number, int precision = 32);
-    LongNumber(long long number, int precision = 32);
-    LongNumber(double number, int precision = 32);
-    LongNumber(long double number, int precision = 32);
-    LongNumber(const LongNumber&) = default;
-    ~LongNumber() = default;
+namespace longnumbers {
+    class LongNumber;
+    LongNumber abs(LongNumber num);
 
-    LongNumber operator-() const;
-    LongNumber operator+(const LongNumber& other) const;
-    LongNumber operator-(const LongNumber& other) const;
-    LongNumber operator*(const LongNumber& other) const;
-    LongNumber operator/(const LongNumber& other) const;
-    friend LongNumber abs(LongNumber num);
+    class LongNumber {
+    public:
+        LongNumber();
+        LongNumber(int number, int precision = 32);
+        LongNumber(long long number, int precision = 32);
+        LongNumber(double number, int precision = 32);
+        LongNumber(long double number, int precision = 32);
+        LongNumber(const LongNumber&) = default;
+        ~LongNumber() = default;
 
-    std::string to_string(int precision = -1, bool truncate = false) const;
-    friend std::ostream& operator<<(std::ostream& out, const LongNumber& num);
-    
-    std::strong_ordering operator<=>(const LongNumber& other) const;
-    bool operator==(const LongNumber& other) const;
+        LongNumber operator-() const;
+        LongNumber operator+(const LongNumber& other) const;
+        LongNumber operator-(const LongNumber& other) const;
+        LongNumber operator*(const LongNumber& other) const;
+        LongNumber operator/(const LongNumber& other) const;
+        friend LongNumber abs(LongNumber num);
 
-    int get_precision() const;
+        std::string to_string(int precision = -1, bool truncate = false) const;
+        friend std::ostream& operator<<(std::ostream& out, const LongNumber& num);
+        
+        std::strong_ordering operator<=>(const LongNumber& other) const;
+        bool operator==(const LongNumber& other) const;
 
-private:
-    int precision;
-    std::vector<char> number;
-    bool is_positive = true;
+        int get_precision() const;
 
-    LongNumber(std::vector<char> number, int precision, bool is_positive = true) 
-        : precision { precision }
-        , number { number }
-        , is_positive { is_positive }
-    {}
+    private:
+        int precision;
+        std::vector<char> number;
+        bool is_positive = true;
 
-    LongNumber _add(const LongNumber& other) const;
-    LongNumber _substract(const LongNumber& other) const;
+        LongNumber(std::vector<char> number, int precision, bool is_positive = true) 
+            : precision { precision }
+            , number { number }
+            , is_positive { is_positive }
+        {}
 
-    void _shl();
-    void _shr();
+        LongNumber _add(const LongNumber& other) const;
+        LongNumber _substract(const LongNumber& other) const;
 
-    void _remove_leading_zeros();
-    std::vector<int> _to_vec_integral() const;
+        void _shl();
+        void _shr();
+
+        void _remove_leading_zeros();
+        std::vector<int> _to_vec_integral() const;
+    };
+
+    namespace literals {
+        LongNumber operator""_longnum(long double number);
+    }
+
 };
-
-LongNumber operator""_longnum(long double number);
 
 #endif

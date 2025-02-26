@@ -1,7 +1,10 @@
 #include <doctest.h>
 #include "longnumbers.hpp"
 
+
 TEST_CASE("Test negation") {
+    using namespace longnumbers;
+    using namespace longnumbers::literals;
     SUBCASE("Whole numbers") {
         LongNumber whole_pos { 5 };
         LongNumber whole_neg { -5 };
@@ -19,6 +22,9 @@ TEST_CASE("Test negation") {
 }
 
 TEST_CASE("Test addition") {
+    using namespace longnumbers;
+    using namespace longnumbers::literals;
+
     SUBCASE("Whole numbers") {
         LongNumber whole_small_prec_2 { 15, 2 };
         LongNumber whole_small_prec_10 { 15, 2 };
@@ -70,6 +76,9 @@ TEST_CASE("Test addition") {
 }
 
 TEST_CASE("Test substraction") {
+    using namespace longnumbers;
+    using namespace longnumbers::literals;
+
     SUBCASE("Whole numbers") {
         LongNumber whole_small_prec_2 { 15, 2 };
         LongNumber whole_small_prec_10 { 15, 2 };
@@ -126,6 +135,9 @@ TEST_CASE("Test substraction") {
 }
 
 TEST_CASE("Test multiplication") {
+    using namespace longnumbers;
+    using namespace longnumbers::literals;
+
     SUBCASE("Whole numbers") {
         LongNumber whole_big_prec_2 { 12, 2 };
         LongNumber whole_big_prec_10 { 12, 10 };
@@ -176,6 +188,9 @@ TEST_CASE("Test multiplication") {
 }
 
 TEST_CASE("Test division") {
+    using namespace longnumbers;
+    using namespace longnumbers::literals;
+
     SUBCASE("Whole numbers") {
         LongNumber whole_big_prec_2 { 12, 2 };
         LongNumber whole_big_prec_10 { 12, 10 };

@@ -2,7 +2,9 @@
 #include <iostream>
 #include <iomanip>
 
-LongNumber calc_pi(int prec) {
+longnumbers::LongNumber calc_pi(int prec) {
+    using longnumbers::LongNumber;
+    
     LongNumber pi { 0, prec };
     LongNumber n0 { 1, prec };
     LongNumber n { 16, prec };

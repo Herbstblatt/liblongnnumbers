@@ -1,7 +1,10 @@
 #include "doctest.h"
 #include "longnumbers.hpp"
 
+
 TEST_CASE("Long number comparsion") {
+    using namespace longnumbers;
+    using namespace longnumbers::literals;
     LongNumber whole_small_prec_2 { 5, 2 };
     LongNumber whole_small_prec_10 { 5, 10 };
 
