@@ -39,11 +39,11 @@ std::strong_ordering LongNumber::operator<=>(const LongNumber& other) const {
     }
     
     for (int i = first_non_zero, j = second_non_zero; std::max(i, j) >= 0; i--, j--) {
-        bool this_val;
+        char this_val;
         if (i >= 0) this_val = first->number[i];
         else this_val = 0;
 
-        bool other_val;
+        char other_val;
         if (j >= 0) other_val = second->number[j];
         else other_val = 0;
 

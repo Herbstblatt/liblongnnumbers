@@ -25,7 +25,7 @@ public:
     LongNumber operator/(const LongNumber& other) const;
     friend LongNumber abs(LongNumber num);
 
-    std::string to_string(int precision = -1) const;
+    std::string to_string(int precision = -1, bool truncate = false) const;
     friend std::ostream& operator<<(std::ostream& out, const LongNumber& num);
     
     std::strong_ordering operator<=>(const LongNumber& other) const;
@@ -35,10 +35,10 @@ public:
 
 private:
     int precision;
-    std::vector<bool> number;
+    std::vector<char> number;
     bool is_positive = true;
 
-    LongNumber(std::vector<bool> number, int precision, bool is_positive = true) 
+    LongNumber(std::vector<char> number, int precision, bool is_positive = true) 
         : precision { precision }
         , number { number }
         , is_positive { is_positive }

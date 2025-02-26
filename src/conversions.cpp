@@ -13,13 +13,12 @@ std::vector<int> LongNumber::_to_vec_integral() const {
             if (idx == 0) return t + this->number[i]; 
             else return t;
         });
-        //print_vector(int_result);
     }
     
     return int_result;
 }
 
-std::string LongNumber::to_string(int precision) const {
+std::string LongNumber::to_string(int precision, bool truncate) const {
     auto int_result { this->_to_vec_integral() };
 
     /* Convert double part */
@@ -40,26 +39,23 @@ std::string LongNumber::to_string(int precision) const {
     auto db_result = frac._to_vec_integral();
     size_t prev_size = db_result.size();
 
-    //print_vector(db_result);
-
-    perform_action_carrying<int>(db_result, [&](int t, int ind) {
-        if (ind == this->precision - precision - 1) {
-            if (t >= 5) return 10;
-            else return 0;
-        }
-        return t;
-    });
-
-    //print_vector(db_result);
-
-    if (db_result.size() > prev_size) {
-        /* No double part, increment int part to 1 */
-        perform_action_carrying<int>(int_result, [&](int t, int ind) {
-            if (ind == 0) return t + 1;
+    if (!truncate) {
+        perform_action_carrying<int>(db_result, [&](int t, int ind) {
+            if (ind == this->precision - precision - 1) {
+                if (t >= 5) return 10;
+                else return 0;
+            }
             return t;
         });
-    }
 
+        if (db_result.size() > prev_size) {
+            /* No double part, increment int part to 1 */
+            perform_action_carrying<int>(int_result, [&](int t, int ind) {
+                if (ind == 0) return t + 1;
+                return t;
+            });
+        }
+    }
     std::string result{};
     if (!this->is_positive) result.push_back('-');
     for (auto it = int_result.rbegin(); it != int_result.rend(); it++) {

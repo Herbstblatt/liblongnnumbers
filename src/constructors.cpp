@@ -13,7 +13,7 @@ LongNumber::LongNumber(int number, int precision)
 
 LongNumber::LongNumber(long long number, int precision)
     : precision { precision }
-    , number { std::vector<bool>(precision, 0) }
+    , number { std::vector<char>(precision, 0) }
     , is_positive { number >= 0 }
 {
     if (number == 0) {
